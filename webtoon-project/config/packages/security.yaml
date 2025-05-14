@@ -53,6 +53,7 @@ security:
         # get recommendations
         # get recherches
         - { path: ^/api/login, roles: PUBLIC_ACCESS, methods: [POST] }
+        - { path: ^/api/register, roles: PUBLIC_ACCESS, methods: [POST] }
         # post insription
 
         # Accès utilisateur authentifié
