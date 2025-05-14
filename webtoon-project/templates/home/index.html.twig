@@ -1,0 +1,18 @@
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    <h1>Liste des Webtoons</h1>
+
+    {% if webtoons is not empty %}
+        <ul>
+            {% for webtoon in webtoons %}
+                <li>
+                    <strong>{{ webtoon.titre }}</strong><br>
+                    <em>{{ webtoon.description }}</em>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucun webtoon trouvé.</p>
+    {% endif %}
+{% endblock %}
