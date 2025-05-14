@@ -24,6 +24,7 @@ security:
                 password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        
 
         api:
             pattern: ^/api
@@ -37,6 +38,9 @@ security:
             form_login:
                 login_path: app_login
                 check_path: app_login
+            logout:
+                path: app_logout
+                target: app_login
 
     role_hierarchy:
         ROLE_ADMIN: [ROLE_AUTHOR]

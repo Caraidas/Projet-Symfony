@@ -14,11 +14,13 @@ class ControllerHome extends AbstractController
     #[Route('/home', name: 'home')]
     public function index(EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
         // Récupérer tous les webtoons depuis la base
         $webtoons = $entityManager->getRepository(Webtoon::class)->findAll();
 
         return $this->render('home/index.html.twig', [
             'webtoons' => $webtoons,
+            'user' => $user,
         ]);
     }
 }

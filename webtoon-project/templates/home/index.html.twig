@@ -1,17 +1,49 @@
+<style>
+    .webtoon {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+</style>
+
+
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
+
+    <div class="user-status">
+    {% if user %}
+        <p>Bienvenue, {{ user.pseudo }} !</p>
+        <form method="post" action="{{ path('app_logout') }}">
+            <button type="submit">Se déconnecter</button>
+        </form>
+    {% else %}
+        <p>Vous n'êtes pas connecté. <a href="{{ path('app_login') }}">Se connecter</a></p>
+    {% endif %}
+    </div>
+
     <h1>Liste des Webtoons</h1>
 
     {% if webtoons is not empty %}
-        <ul>
-            {% for webtoon in webtoons %}
-                <li>
-                    <strong>{{ webtoon.titre }}</strong><br>
-                    <em>{{ webtoon.description }}</em>
-                </li>
-            {% endfor %}
-        </ul>
+
+        {% for webtoon in webtoons %}
+        <div class="webtoon">
+            <h2>{{ webtoon.titre }}</h2>
+            <p>{{ webtoon.description }}</p>
+
+            {% if webtoon.genre is not empty %}
+                <p><strong>Genres :</strong>
+                    {% for genre in webtoon.genre %}
+                        {{ genre.nom }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+            {% else %}
+                <p><em>Aucun genre associé.</em></p>
+            {% endif %}
+        </div>
+    {% endfor %}
+
     {% else %}
         <p>Aucun webtoon trouvé.</p>
     {% endif %}
