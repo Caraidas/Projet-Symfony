@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ webtoon.titre }}{% endblock %}
+
+{% block body %}
+    <h1>{{ webtoon.titre }}</h1>
+    <p>{{ webtoon.description }}</p>
+
+    {% if episodes|length > 0 %}
+        <ul>
+            {% for episode in episodes %}
+                <li>
+                    <a href="{{ path('episode_detail', {slug: webtoon.slug, id: episode.id}) }}">
+                        Voir l’épisode {{ episode.number }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucun épisode pour le moment.</p>
+    {% endif %}
+
+    {% if webtoon.image %}
+        <img src="{{ asset('images/' ~ webtoon.image) }}" alt="{{ webtoon.titre }}" width="300">
+    {% else %}
+        <img src="{{ asset('images/Default.png') }}" alt="Image par défaut" width="300">
+    {% endif %}
+
+    <p><strong>Auteur :</strong> {{ webtoon.user.email }}</p>
+{% endblock %}

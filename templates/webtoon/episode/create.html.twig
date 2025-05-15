@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Créer un épisode pour {{ webtoon.titre }}</h1>
+
+    <form id="episodeForm" enctype="multipart/form-data">
+        <input type="text" name="title" placeholder="Titre" required><br>
+        <input type="number" name="number" placeholder="Numéro" required><br>
+        <input type="file" name="images[]" multiple required><br>
+        <button type="submit">Envoyer</button>
+    </form>
+
+    <script>
+        const form = document.getElementById('episodeForm');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+
+            const response = await fetch('{{ path('api_create_episode', {slug: webtoon.slug}) }}', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer {{ jwt_token }}'
+                },
+                body: formData
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert('Épisode publié avec succès !');
+                window.location.href = '{{ path('webtoon_show', {slug: webtoon.slug}) }}';
+            } else {
+                alert(result.error || 'Erreur lors de la création');
+            }
+        });
+    </script>
+{% endblock %}

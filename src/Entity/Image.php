@@ -21,6 +21,10 @@ class Image
     #[ORM\Column]
     private ?int $position = null;
 
+    #[ORM\ManyToOne(targetEntity: Episode::class, inversedBy: 'images')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Episode $episode = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -46,6 +50,18 @@ class Image
     public function setPosition(int $position): static
     {
         $this->position = $position;
+
+        return $this;
+    }
+
+    public function getEpisode(): ?Episode
+    {
+        return $this->episode;
+    }
+
+    public function setEpisode(?Episode $episode): static
+    {
+        $this->episode = $episode;
 
         return $this;
     }

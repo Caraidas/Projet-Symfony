@@ -7,6 +7,8 @@ use App\Repository\EpisodeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Webtoon;
+use App\Entity\Image;
 
 #[ORM\Entity(repositoryClass: EpisodeRepository::class)]
 #[ApiResource]
@@ -26,6 +28,10 @@ class Episode
     #[ORM\Column]
     private ?int $number = null;
 
+    #[ORM\ManyToOne(targetEntity: Webtoon::class, inversedBy: 'episodes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Webtoon $webtoon = null;
+
     /**
      * @var Collection<int, Commentaire>
      */
@@ -35,6 +41,7 @@ class Episode
     public function __construct()
     {
         $this->Commentaire = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -74,6 +81,51 @@ class Episode
     public function setNumber(int $number): static
     {
         $this->number = $number;
+
+        return $this;
+    }
+
+    /**
+     * @var Collection<int, Image>
+     */
+    #[ORM\OneToMany(mappedBy: 'episode', targetEntity: Image::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OrderBy(['position' => 'ASC'])]
+    private Collection $images;
+
+    public function getWebtoon(): ?Webtoon
+    {
+        return $this->webtoon;
+    }
+
+    public function setWebtoon(?Webtoon $webtoon): static
+    {
+        $this->webtoon = $webtoon;
+
+        return $this;
+    }
+
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): static
+    {
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
+            $image->setEpisode($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): static
+    {
+        if ($this->images->removeElement($image)) {
+            if ($image->getEpisode() === $this) {
+                $image->setEpisode(null);
+            }
+        }
 
         return $this;
     }

@@ -18,7 +18,7 @@ class Webtoon
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $titre = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -30,6 +30,9 @@ class Webtoon
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
+
+    #[ORM\Column(length: 255, unique: true)]
+    private ?string $slug = null;
 
     /**
      * @var Collection<int, Genre>
@@ -49,11 +52,18 @@ class Webtoon
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'likes')]
     private Collection $users;
 
+    /**
+     * @var Collection<int, Episode>
+     */
+    #[ORM\OneToMany(mappedBy: 'webtoon', targetEntity: Episode::class, orphanRemoval: true, cascade: ['persist'])]
+    private Collection $episodes;
+
     public function __construct()
     {
         $this->genre = new ArrayCollection();
         $this->Commentaire = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->episodes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -105,6 +115,43 @@ class Webtoon
     public function setImage(?string $image): static
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+        return $this;
+    }
+
+    public function getEpisodes(): Collection
+    {
+        return $this->episodes;
+    }
+
+    public function addEpisode(Episode $episode): static
+    {
+        if (!$this->episodes->contains($episode)) {
+            $this->episodes[] = $episode;
+            $episode->setWebtoon($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEpisode(Episode $episode): static
+    {
+        if ($this->episodes->removeElement($episode)) {
+            if ($episode->getWebtoon() === $this) {
+                $episode->setWebtoon(null);
+            }
+        }
 
         return $this;
     }

@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class WebtoonCreationController extends AbstractController
 {
@@ -30,9 +31,20 @@ class WebtoonCreationController extends AbstractController
             return new JsonResponse(['error' => 'Non authentifié'], 401);
         }
 
+        $titre = $request->request->get('titre');
+
+        $slugger = new AsciiSlugger();
+        $slug = $slugger->slug($titre);
+
+        $originalSlug = $slug;
+        $i = 1;
+        while ($em->getRepository(Webtoon::class)->findOneBy(['slug' => $slug])) {
+            $slug = $originalSlug . '-' . $i;
+            $i++;
+        }
+
         $webtoon = new Webtoon();
 
-        $titre = $request->request->get('titre');
         $description = $request->request->get('description');
         $genres = $request->request->all('genres'); // tableau d'IDs
         $imageFile = $request->files->get('image');
@@ -56,7 +68,7 @@ class WebtoonCreationController extends AbstractController
         $webtoon->setTitre($titre);
         $webtoon->setDescription($description);
         $webtoon->setUser($user);
-
+        $webtoon->setSlug($slug);
         foreach ($genres as $genreId) {
             $genre = $em->getRepository(Genre::class)->find($genreId);
             if ($genre) {

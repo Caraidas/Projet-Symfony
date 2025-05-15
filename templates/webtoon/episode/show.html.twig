@@ -1,0 +1,9 @@
+<h1>{{ episode.title }}</h1>
+<p>Numéro : {{ episode.number }}</p>
+<p>Date de création : {{ episode.createdAt|date('d/m/Y') }}</p>
+
+<div style="display: flex; flex-direction: column; align-items: center;">
+    {% for image in episode.images|sort((a, b) => a.position <=> b.position) %}
+        <img src="{{ asset('' ~ image.url) }}" alt="Image {{ loop.index }}" style="max-width: 100%; display: block;">
+    {% endfor %}
+</div>
