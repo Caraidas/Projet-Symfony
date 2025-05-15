@@ -1,0 +1,47 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+
+    <div class="user-status">
+    {% if user %}
+        <p>Bienvenue, {{ user.pseudo }} !</p>
+        <form method="post" action="{{ path('app_logout') }}">
+            <button type="submit">Se déconnecter</button>
+        </form>
+    {% else %}
+        <p>Vous n'êtes pas connecté. <a href="{{ path('app_login') }}">Se connecter</a></p>
+    {% endif %}
+    </div>
+
+    <h1>Liste des Webtoons</h1>
+
+    {% if webtoons is not empty %}
+
+        {% for webtoon in webtoons %}
+        <div class="webtoon">
+            <div class="webtoon-card">
+                <h3>{{ webtoon.titre }}</h3>
+                <img src="{{ asset('images/' ~ (webtoon.image ? webtoon.image : 'Default.png')) }}" alt="{{ webtoon.titre }}" width="200">
+                <p>{{ webtoon.description }}</p>
+
+                {% if webtoon.genre is not empty %}
+                    <p><strong>Genres :</strong>
+                        {% for genre in webtoon.genre %}
+                            {{ genre.nom }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                {% else %}
+                    <p><em>Aucun genre associé.</em></p>
+                {% endif %}
+                </p>
+            </div>
+        </div>
+    {% endfor %}
+
+    {% else %}
+        <p>Aucun webtoon trouvé.</p>
+    {% endif %}
+{% endblock %}

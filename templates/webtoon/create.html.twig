@@ -1,0 +1,55 @@
+{% block title %}Créer un Webtoon{% endblock %}
+
+{% block body %}
+    <h1>Créer un Webtoon</h1>
+
+    <form id="webtoon-form" enctype="multipart/form-data">
+        <label for="titre">Titre</label>
+        <input type="text" name="titre" id="titre" required>
+
+        <label for="description">Description</label>
+        <textarea name="description" id="description" required></textarea>
+
+        <label for="genres">Genres</label>
+        {% for genre in genres %}
+            <div>
+                <input type="checkbox" name="genres[]" value="{{ genre.id }}"> {{ genre.nom }}
+            </div>
+        {% endfor %}
+
+        <label for="image">Image</label>
+        <input type="file" name="image" id="image" accept="image/*" required>
+
+        <button type="submit">Créer</button>
+    </form>
+
+    <script>
+        document.getElementById('webtoon-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const form = document.getElementById('webtoon-form');
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('/api/webtoon/create', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer {{ jwt_token|e('js') }}'
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    alert('Erreur : ' + (data.error || 'Erreur inconnue'));
+                    return;
+                }
+
+                alert('Webtoon créé avec succès !');
+                window.location.href = '/home';
+            } catch (e) {
+                alert('Erreur réseau : ' + e.message);
+            }
+        });
+    </script>
+{% endblock %}

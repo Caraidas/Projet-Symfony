@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Mon site Webtoon{% endblock %}</title>
+    <style>
+        header {
+            background-color: #f5f5f5;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .menu-btn {
+            padding: 8px 12px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .menu-btn:hover {
+            background-color: #2980b9;
+        }
+        .webtoon {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Webtoon</h1>
+        <a href="{{ path('home') }}" class="menu-btn">Accueil</a>
+    </header>
+
+    <main>
+        {% block body %}{% endblock %}
+    </main>
+
+</body>
+</html>
