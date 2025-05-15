@@ -1,12 +1,5 @@
-<style>
-    .webtoon {
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        padding: 15px;
-        margin-bottom: 20px;
-    }
-</style>
 
+{% extends 'base.html.twig' %}
 
 {% block title %}Accueil{% endblock %}
 
@@ -29,18 +22,22 @@
 
         {% for webtoon in webtoons %}
         <div class="webtoon">
-            <h2>{{ webtoon.titre }}</h2>
-            <p>{{ webtoon.description }}</p>
+            <div class="webtoon-card">
+                <h3>{{ webtoon.titre }}</h3>
+                <img src="{{ asset('images/' ~ (webtoon.image ? webtoon.image : 'Default.png')) }}" alt="{{ webtoon.titre }}" width="200">
+                <p>{{ webtoon.description }}</p>
 
-            {% if webtoon.genre is not empty %}
-                <p><strong>Genres :</strong>
-                    {% for genre in webtoon.genre %}
-                        {{ genre.nom }}{% if not loop.last %}, {% endif %}
-                    {% endfor %}
+                {% if webtoon.genre is not empty %}
+                    <p><strong>Genres :</strong>
+                        {% for genre in webtoon.genre %}
+                            {{ genre.nom }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                {% else %}
+                    <p><em>Aucun genre associé.</em></p>
+                {% endif %}
                 </p>
-            {% else %}
-                <p><em>Aucun genre associé.</em></p>
-            {% endif %}
+            </div>
         </div>
     {% endfor %}
 
