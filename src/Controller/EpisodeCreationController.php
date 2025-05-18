@@ -47,6 +47,17 @@ class EpisodeCreationController extends AbstractController
         $episode->setCreatedAt(new \DateTimeImmutable());
         $episode->setWebtoon($webtoon);
 
+        $existingEpisode = $em->getRepository(Episode::class)->findOneBy([
+            'webtoon' => $webtoon,
+            'number' => $number,
+        ]);
+
+        if ($existingEpisode) {
+            return new JsonResponse([
+                'error' => 'Un épisode avec ce numéro existe déjà pour ce webtoon.'
+            ], 409);
+        }
+
         $uploadDir = $this->getParameter('kernel.project_dir') . '/public/uploads/episodes';
 
         foreach ($images as $index => $imageFile) {
@@ -66,6 +77,8 @@ class EpisodeCreationController extends AbstractController
                 return new JsonResponse(['error' => 'Erreur upload'], 500);
             }
         }
+
+        
 
         $em->persist($episode);
         $em->flush();
@@ -92,4 +105,76 @@ class EpisodeCreationController extends AbstractController
             'jwt_token' => $session->get('jwt_token'),
         ]);
     }
+
+    #[Route('/api/episode/update/{id}', name: 'api_update_episode', methods: ['POST'])]
+    #[IsGranted('ROLE_AUTHOR')]
+    public function update(
+        int $id,
+        Request $request,
+        EntityManagerInterface $em
+    ): JsonResponse {
+        $user = $this->getUser();
+        $episode = $em->getRepository(Episode::class)->find($id);
+
+        if (!$episode || $episode->getWebtoon()->getUser() !== $user) {
+            return new JsonResponse(['error' => 'Épisode non trouvé ou non autorisé'], 403);
+        }
+
+        $images = $request->files->get('images');
+        if (!$images) {
+            return new JsonResponse(['error' => 'Aucune image fournie'], 400);
+        }
+
+        // Supprimer les anciennes images
+        foreach ($episode->getImages() as $image) {
+            $em->remove($image);
+        }
+
+        $uploadDir = $this->getParameter('kernel.project_dir') . '/public/uploads/episodes';
+
+        foreach ($images as $index => $imageFile) {
+            $safeName = (new AsciiSlugger())->slug(pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME));
+            $newFilename = $safeName . '-' . uniqid() . '.' . $imageFile->guessExtension();
+
+            try {
+                $imageFile->move($uploadDir, $newFilename);
+
+                $image = new Image();
+                $image->setUrl('/uploads/episodes/' . $newFilename);
+                $image->setPosition($index + 1);
+                $image->setEpisode($episode);
+                $em->persist($image);
+            } catch (\Exception $e) {
+                return new JsonResponse(['error' => 'Erreur upload'], 500);
+            }
+        }
+
+        $em->flush();
+
+        return new JsonResponse(['success' => true, 'episodeId' => $episode->getId()], 200);
+    }
+
+
+    #[Route('/webtoon/{slug}/edit-episode', name: 'episode_edit_form', methods: ['GET'])]
+    #[IsGranted('ROLE_AUTHOR')]
+    public function editForm(
+        string $slug,
+        WebtoonRepository $webtoonRepository,
+        EntityManagerInterface $em,
+        SessionInterface $session
+    ): Response {
+        $user = $this->getUser();
+        $webtoon = $webtoonRepository->findOneBy(['slug' => $slug]);
+
+        if (!$webtoon || $webtoon->getUser() !== $user) {
+            throw $this->createAccessDeniedException('Webtoon introuvable ou non autorisé.');
+        }
+
+        return $this->render('webtoon/episode/edit.html.twig', [
+            'webtoon' => $webtoon,
+            'episodes' => $webtoon->getEpisodes(),
+            'jwt_token' => $session->get('jwt_token'),
+        ]);
+    }
+
 }

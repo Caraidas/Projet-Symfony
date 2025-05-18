@@ -1,9 +1,79 @@
-<h1>{{ episode.title }}</h1>
-<p>Numéro : {{ episode.number }}</p>
-<p>Date de création : {{ episode.createdAt|date('d/m/Y') }}</p>
+{% extends 'base.html.twig' %}
 
-<div style="display: flex; flex-direction: column; align-items: center;">
-    {% for image in episode.images|sort((a, b) => a.position <=> b.position) %}
-        <img src="{{ asset('' ~ image.url) }}" alt="Image {{ loop.index }}" style="max-width: 100%; display: block;">
-    {% endfor %}
-</div>
+{% block body %}
+    <style>
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .nav-button {
+            background-color: #36b3b3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .nav-button:hover {
+            background-color: #2ea3a3;
+        }
+    </style>
+
+    <h1>{{ episode.title }}</h1>
+    <p>Numéro : {{ episode.number }}</p>
+    <p>Date de création : {{ episode.createdAt|date('d/m/Y') }}</p>
+
+    {# --- Navigation en haut --- #}
+    <div class="nav-buttons">
+        {% if previousEpisode %}
+            <a href="{{ path('episode_detail', { slug: previousEpisode.webtoon.slug, id: previousEpisode.id }) }}"
+            class="nav-button">← Prev</a>
+        {% else %}
+            <a href="{{ path('webtoon_show', { slug: webtoon.slug }) }}"
+            class="nav-button">Back to Webtoon</a>
+        {% endif %}
+
+        {% if nextEpisode %}
+            <a href="{{ path('episode_detail', { slug: nextEpisode.webtoon.slug, id: nextEpisode.id }) }}"
+            class="nav-button">Next →</a>
+        {% else %}
+            <a href="{{ path('webtoon_show', { slug: webtoon.slug }) }}"
+            class="nav-button">Back to Webtoon</a>
+        {% endif %}
+    </div>
+
+    {# --- Images centrées --- #}
+    <div style="display: flex; flex-direction: column; align-items: center;">
+        {% for image in episode.images|sort((a, b) => a.position <=> b.position) %}
+            <img src="{{ asset('' ~ image.url) }}" alt="Image {{ loop.index }}" style="max-width: 100%; display: block;">
+        {% endfor %}
+    </div>
+
+    {# --- Navigation en bas --- #}
+    <div class="nav-buttons">
+        {% if previousEpisode %}
+            <a href="{{ path('episode_detail', { slug: previousEpisode.webtoon.slug, id: previousEpisode.id }) }}"
+            class="nav-button">← Prev</a>
+        {% else %}
+            <a href="{{ path('webtoon_show', { slug: webtoon.slug }) }}"
+            class="nav-button">Back to Webtoon</a>
+        {% endif %}
+
+        {% if nextEpisode %}
+            <a href="{{ path('episode_detail', { slug: nextEpisode.webtoon.slug, id: nextEpisode.id }) }}"
+            class="nav-button">Next →</a>
+        {% else %}
+            <a href="{{ path('webtoon_show', { slug: webtoon.slug }) }}"
+            class="nav-button">Back to Webtoon</a>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<h2>Modifier un épisode de {{ webtoon.titre }}</h2>
+
+<form id="editEpisodeForm" method="post" enctype="multipart/form-data">
+    <label for="episode_id">Épisode :</label>
+    <select name="episode_id" id="episode_id" required>
+        {% for episode in episodes %}
+            <option value="{{ episode.id }}">
+                Épisode {{ episode.number }} - {{ episode.title }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <br><br>
+    <label for="images">Nouvelles images :</label>
+    <input type="file" name="images[]" multiple required>
+
+    <br><br>
+    <button type="submit">Mettre à jour</button>
+</form>
+
+<script>
+document.getElementById('editEpisodeForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const episodeId = document.getElementById('episode_id').value;
+
+    const response = await fetch(`/api/episode/update/${episodeId}`, {
+        method: 'POST',
+        body: formData
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+        alert('Épisode mis à jour avec succès !');
+        window.location.href = '/webtoon/{{ webtoon.slug }}';
+    } else {
+        alert(result.error || 'Erreur lors de la mise à jour');
+    }
+});
+</script>
+{% endblock %}

@@ -23,8 +23,12 @@
         {% for webtoon in webtoons %}
         <div class="webtoon">
             <div class="webtoon-card">
+                <a href="webtoon/{{webtoon.slug}}">
                 <h3>{{ webtoon.titre }}</h3>
-                <img src="{{ asset('images/' ~ (webtoon.image ? webtoon.image : 'Default.png')) }}" alt="{{ webtoon.titre }}" width="200">
+                </a>
+                <a href="webtoon/{{webtoon.slug}}">
+                    <img src="{{ asset('images/' ~ (webtoon.image ? webtoon.image : 'Default.png')) }}" alt="{{ webtoon.titre }}" width="200">
+                </a>
                 <p>{{ webtoon.description }}</p>
 
                 {% if webtoon.genre is not empty %}

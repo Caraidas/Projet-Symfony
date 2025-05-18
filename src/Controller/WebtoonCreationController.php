@@ -82,7 +82,7 @@ class WebtoonCreationController extends AbstractController
         return new JsonResponse(['success' => true, 'id' => $webtoon->getId()], 201);
     }
 
-    #[Route('/webtoon/create', name: 'webtoon_form', methods: ['GET','POST'])]
+    #[Route('/create', name: 'webtoon_form', methods: ['GET','POST'])]
     public function form(GenreRepository $genreRepo, SessionInterface $session)
     {
         $user = $this->getUser();
