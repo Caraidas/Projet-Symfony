@@ -1,15 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-<h1>Mes Webtoons Favoris</h1>
+{% block title %}Mes Favoris{% endblock %}
 
-<ul>
-    {% for webtoon in favoris %}
-        <li>
-            <a href="{{ path('webtoon_show', { slug: webtoon.slug }) }}">{{ webtoon.titre }}</a>
-        </li>
-    {% else %}
-        <li>Aucun favori pour l’instant.</li>
-    {% endfor %}
-</ul>
+{% block body %}
+    <h1 class="text-2xl font-bold mb-4">Mes Webtoons Favoris</h1>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {% for webtoon in webtoons %}
+            <div class="bg-white rounded-2xl shadow p-4 flex gap-4 items-start">
+                <img src="{{ asset('images/' ~ webtoon.image) }}" alt="{{ webtoon.titre }}" class="w-32 h-32 object-cover rounded-xl" width="200">
+
+                <div class="flex-1">
+                    <h2 class="text-lg font-semibold truncate mb-2">{{ webtoon.titre }}</h2>
+
+                    <h3 class="text-sm font-bold mb-1">Derniers épisodes :</h3>
+                    <ul class="space-y-1">
+                        {% for episode in webtoon.episodes|slice(-2)|reverse %}
+                            <li class="text-sm text-blue-600">
+                                <a href="{{ path('episode_detail', { slug: webtoon.slug , id: episode.number } ) }}">{{ episode.title }}</a>
+                            </li>
+                        {% else %}
+                            <li class="text-sm text-gray-400">Aucun épisode</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

@@ -48,9 +48,8 @@
 
     .episode-list {
         flex: 2;
-        background-color: #fff;
+        background-color: #041629;
         padding: 1rem;
-        border: 1px solid #ddd;
         border-radius: 8px;
         max-width: 500px;
         width: 100%;
@@ -138,8 +137,9 @@
                     {% for episode in episodes %}
                         <li>
                             <a href="{{ path('episode_detail', {slug: webtoon.slug, id: episode.number}) }}">
-                                Voir l’épisode {{ episode.number }}
-                            </a>
+                                Voir l’épisode {{ episode.number }} : {{ episode.title }}
+                            </a> 
+                            <p>{{ episode.createdAt|date('d/m/Y') }}</p> 
                         </li>
                     {% endfor %}
                 </ul>

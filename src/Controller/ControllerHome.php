@@ -37,8 +37,18 @@ class ControllerHome extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
+        $favoris = $user->getFavoris()->toArray();
+        
+        usort($favoris, function($a, $b) {
+            $lastA = $a->getEpisodes()->isEmpty() ? null : $a->getEpisodes()->last()->getCreatedAt();
+            $lastB = $b->getEpisodes()->isEmpty() ? null : $b->getEpisodes()->last()->getCreatedAt();
+
+            return $lastB <=> $lastA;
+        });
+
         return $this->render('user/favoris.html.twig', [
             'favoris' => $user->getFavoris(),
+            'webtoons' => $favoris,
         ]);
     }
 }
