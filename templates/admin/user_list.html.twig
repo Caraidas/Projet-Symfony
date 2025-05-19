@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration{% endblock %}
+
+{% block body %}
+    <h1>Gestion des utilisateurs</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Rôle actuel</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.roles|join(', ') }}</td>
+                <td>
+                    {% if 'ROLE_AUTHOR' in user.roles %}
+                        <a href="{{ path('admin_toggle_role', {id: user.id}) }}">Révoquer Auteur</a>
+                    {% else %}
+                        <a href="{{ path('admin_toggle_role', {id: user.id}) }}">Promouvoir Auteur</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -70,7 +70,7 @@ security:
         # post ajouter/modifier/supprimer un webtoon
 
         # Accès admin
-        # get liste utilisateurs
+        - { path: ^/admin, roles: ROLE_ADMIN }
         # post modifier/supprimer un utilisateur
 
 when@test:
