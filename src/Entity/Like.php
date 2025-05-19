@@ -46,5 +46,23 @@ class Like
     {
         return $this->user;
     }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    public function setWebtoon(?Webtoon $webtoon): static
+    {
+        $this->webtoon = $webtoon;
+        return $this;
+    }
+
+    public function setLikedAt(\DateTimeImmutable $likedAt): static
+    {
+        $this->likedAt = $likedAt;
+        return $this;
+    }
 }
 

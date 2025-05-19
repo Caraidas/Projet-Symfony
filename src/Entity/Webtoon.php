@@ -52,6 +52,9 @@ class Webtoon
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'likes')]
     private Collection $users;
 
+    #[ORM\OneToMany(mappedBy: 'webtoon', targetEntity: Like::class, orphanRemoval: true)]
+    private Collection $likes;
+
     /**
      * @var Collection<int, Episode>
      */
@@ -64,6 +67,7 @@ class Webtoon
         $this->Commentaire = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->episodes = new ArrayCollection();
+        $this->likes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -133,6 +137,11 @@ class Webtoon
     public function getEpisodes(): Collection
     {
         return $this->episodes;
+    }
+
+    public function getLikes(): Collection
+    {
+        return $this->likes;
     }
 
     public function addEpisode(Episode $episode): static

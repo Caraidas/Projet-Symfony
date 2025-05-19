@@ -86,6 +86,24 @@
             ✏️ Modifier Webtoon
         </a>
     {% endif %}
+    {% if app.user %}
+        {% set liked = false %}
+        {% for like in webtoon.likes %}
+            {% if like.user == app.user %}
+                {% set liked = true %}
+            {% endif %}
+        {% endfor %}
+
+        <form method="post" action="{{ path('webtoon_like', {id: webtoon.id}) }}">
+            <button type="submit" class="btn-edit">
+                {{ liked ? 'Je n’aime plus ❤️' : 'J’aime ❤️' }}
+            </button>
+        </form>
+    {% else %}
+        <p><a href="{{ path('app_login') }}">Connecte-toi pour aimer ce webtoon</a></p>
+    {% endif %}
+    <p>{{ webtoon.likes|length }} j'aime</p>
+
     
 
     <h1>{{ webtoon.titre }}</h1>
