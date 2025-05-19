@@ -51,6 +51,11 @@
                     ✍️ Créer un Webtoon
                 </a>
             {% endif %}
+            {% if is_granted('ROLE_USER') %}
+                <a href="{{ path('user_favoris') }}" class="menu-btn">
+                    Mes Favoris
+                </a>
+            {% endif %}
             {% if is_granted('ROLE_ADMIN') %}
                 <a href="{{ path('admin_user_list') }}" class="menu-btn">Admin</a>
             {% endif %}

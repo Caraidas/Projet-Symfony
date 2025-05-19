@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 use App\Entity\Webtoon;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,6 +26,19 @@ class ControllerHome extends AbstractController
         return $this->render('home/index.html.twig', [
             'webtoons' => $webtoons,
             'user' => $user,
+        ]);
+    }
+    #[Route('/mes-favoris', name: 'user_favoris')]
+    public function favoris(): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $this->render('user/favoris.html.twig', [
+            'favoris' => $user->getFavoris(),
         ]);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Webtoon;
 use App\Entity\Episode;
+use App\Entity\User;
 use App\Form\WebtoonType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
@@ -102,6 +103,27 @@ class WebtoonController extends AbstractController
             'form' => $form->createView(),
             'webtoon' => $webtoon,
         ]);
+    }
+
+    #[Route('/webtoon/{id}/favori/toggle', name: 'toggle_favori')]
+    public function toggleFavori(Webtoon $webtoon, EntityManagerInterface $em): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException();
+        }
+
+        if ($user->getFavoris()->contains($webtoon)) {
+            $user->removeFavori($webtoon);
+        } else {
+            $user->addFavori($webtoon);
+        }
+
+        $em->persist($user);
+        $em->flush();
+
+        return $this->redirectToRoute('webtoon_show', ['slug' => $webtoon->getSlug()]);
     }
 
 }

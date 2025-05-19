@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>Mes Webtoons Favoris</h1>
+
+<ul>
+    {% for webtoon in favoris %}
+        <li>
+            <a href="{{ path('webtoon_show', { slug: webtoon.slug }) }}">{{ webtoon.titre }}</a>
+        </li>
+    {% else %}
+        <li>Aucun favori pour l’instant.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

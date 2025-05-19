@@ -50,12 +50,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Webtoon::class, inversedBy: 'users')]
     private Collection $likes;
 
+    #[ORM\ManyToMany(targetEntity: Webtoon::class)]
+    #[ORM\JoinTable(name: 'user_favoris')]
+    private Collection $favoris;
+
 
     public function __construct()
     {
         $this->auteur = new ArrayCollection();
         $this->Commentaire = new ArrayCollection();
         $this->likes = new ArrayCollection();
+        $this->favoris = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -117,6 +122,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return $this->email;
+    }
+
+    public function getFavoris(): Collection
+    {
+        return $this->favoris;
+    }
+
+    public function addFavori(Webtoon $webtoon): static
+    {
+        if (!$this->favoris->contains($webtoon)) {
+            $this->favoris->add($webtoon);
+        }
+
+        return $this;
+    }
+
+    public function removeFavori(Webtoon $webtoon): static
+    {
+        $this->favoris->removeElement($webtoon);
+        return $this;
     }
 
     public function eraseCredentials(): void

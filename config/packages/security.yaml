@@ -49,7 +49,6 @@ security:
     access_control:
         # Accès public
         # get episodes
-        - { path: ^/api/webtoons, roles: PUBLIC_ACCESS, methods: [GET] }
         # get recommendations
         # get recherches
         - { path: ^/api/login, roles: PUBLIC_ACCESS, methods: [POST] }

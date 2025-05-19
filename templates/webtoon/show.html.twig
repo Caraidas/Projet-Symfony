@@ -103,6 +103,18 @@
         <p><a href="{{ path('app_login') }}">Connecte-toi pour aimer ce webtoon</a></p>
     {% endif %}
     <p>{{ webtoon.likes|length }} j'aime</p>
+    
+    {% if is_granted('ROLE_USER') %}
+        <form action="{{ path('toggle_favori', { id: webtoon.id }) }}" method="post">
+            <button type="submit">
+                {% if app.user.favoris.contains(webtoon) %}
+                    Retirer des favoris
+                {% else %}
+                    Ajouter aux favoris
+                {% endif %}
+            </button>
+        </form>
+    {% endif %}
 
     
 
