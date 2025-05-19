@@ -36,12 +36,21 @@
         
 
         <header>
-            <h1>Webtoon</h1>
+            <div class="logo">
+                <h1>MonWebtoon</h1>
+            </div>
+            <div class="menu">
+                {% if not app.user %}
+                    <a href="{{ path('app_login') }}" class="menu-btn">Se connecter</a>
+                    <a href="{{ path('app_register') }}" class="menu-btn">S'inscrire</a>
+                {% endif %}
+            
             {% if is_granted('ROLE_AUTHOR') %}
                 <a href="{{ path('webtoon_form') }}" class="menu-btn">
                     ✍️ Créer un Webtoon
                 </a>
             {% endif %}
+            </div>
 
             <a href="{{ path('home') }}" class="menu-btn">Accueil</a>
         </header>

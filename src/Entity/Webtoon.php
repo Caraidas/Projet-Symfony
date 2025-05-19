@@ -164,6 +164,13 @@ class Webtoon
         return $this->genre;
     }
 
+    public function setGenres(Collection $genres): self
+    {
+        $this->genres = $genres;
+        return $this;
+    }
+
+
     public function addGenre(Genre $genre): static
     {
         if (!$this->genre->contains($genre)) {

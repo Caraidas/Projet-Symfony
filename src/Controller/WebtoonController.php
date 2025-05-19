@@ -5,6 +5,8 @@ namespace App\Controller;
 
 use App\Entity\Webtoon;
 use App\Entity\Episode;
+use App\Form\WebtoonType;
+use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -65,4 +67,41 @@ class WebtoonController extends AbstractController
             'webtoon' => $webtoon,
         ]);
     }
+
+    #[Route('/webtoon/{slug}/edit', name: 'webtoon_edit')]
+    public function edit(
+        string $slug,
+        Request $request,
+        EntityManagerInterface $em
+    ): Response {
+        $user = $this->getUser();
+        $webtoon = $em->getRepository(Webtoon::class)->findOneBy(['slug' => $slug]);
+
+        if (!$webtoon || $webtoon->getUser() !== $user) {
+            throw $this->createAccessDeniedException("Non autorisé.");
+        }
+
+        $form = $this->createForm(WebtoonType::class, $webtoon);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $coverFile = $form->get('coverFile')->getData();
+
+            if ($coverFile) {
+                $newFilename = uniqid() . '.' . $coverFile->guessExtension();
+                $coverFile->move($this->getParameter('cover_directory'), $newFilename);
+                $webtoon->setCoverUrl('/uploads/webtoons/' . $newFilename);
+            }
+
+            $em->flush();
+
+            return $this->redirectToRoute('webtoon_show', ['slug' => $webtoon->getSlug()]);
+        }
+
+        return $this->render('webtoon/edit.html.twig', [
+            'form' => $form->createView(),
+            'webtoon' => $webtoon,
+        ]);
+    }
+
 }

@@ -75,16 +75,19 @@
         text-decoration: underline;
     }
     </style>
-    {% if app.user and webtoon.user == app.user %}
+    {% if app.user and webtoon.user == app.user and isAuthor %}
         <a href="{{ path('episode_form', { slug: webtoon.slug }) }}" class="btn-edit"   >
             ➕ Ajouter un épisode
         </a>
-    {% endif %}
-    {% if isAuthor %}
         <a href="{{ path('episode_edit_form', { slug: webtoon.slug }) }}" class="btn-edit">
             ✏️ Modifier un épisode
         </a>
+        <a href="{{ path('webtoon_edit', { slug: webtoon.slug }) }}" class="btn-edit">
+            ✏️ Modifier Webtoon
+        </a>
     {% endif %}
+    
+
     <h1>{{ webtoon.titre }}</h1>
     <p>{{ webtoon.description }}</p>
 

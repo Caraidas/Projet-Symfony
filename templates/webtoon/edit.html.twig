@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Modifier le Webtoon</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.titre) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.genre) }}
+        {{ form_row(form.coverFile) }}
+        <button type="submit">Enregistrer</button>
+    {{ form_end(form) }}
+{% endblock %}
