@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class WebtoonController extends AbstractController
 {
     #[Route('/{slug}', name: 'webtoon_show')]
-    public function show(string $slug, EntityManagerInterface $em): Response
+    public function show(string $slug, EntityManagerInterface $em, Request $request): Response
     {
         $webtoon = $em->getRepository(Webtoon::class)->findOneBy(['slug' => $slug]);
 
@@ -28,12 +28,37 @@ class WebtoonController extends AbstractController
             throw $this->createNotFoundException('Webtoon non trouvé');
         }
 
+        $commentaire = new Commentaire();
+        $form = $this->createForm(CommentaireType::class, $commentaire);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getUser();
+            if (!$user) {
+                throw $this->createAccessDeniedException("Connecte-toi pour commenter.");
+            }
+
+            $commentaire->setUser($user);
+            $commentaire->setWebtoon($webtoon);
+
+            $em->persist($commentaire);
+            $em->flush();
+
+            return $this->redirectToRoute('webtoon_show', ['slug' => $slug]);
+        }
+
+        $commentaires = $em->getRepository(Commentaire::class)
+            ->findBy(['webtoon' => $webtoon, 'episode' => null], ['id' => 'DESC']);
+
         return $this->render('webtoon/show.html.twig', [
             'webtoon' => $webtoon,
             'episodes' => $webtoon->getEpisodes(),
             'isAuthor' => $this->getUser() === $webtoon->getUser(),
+            'form' => $form->createView(),
+            'commentaires' => $commentaires,
         ]);
     }
+
     
     #[Route('/{slug}/{number}', name: 'episode_detail', requirements: ['number' => '\d+'], methods: ['GET','POST'])]
     public function showEpisode(string $slug, int $number, EntityManagerInterface $em, Request $request): Response

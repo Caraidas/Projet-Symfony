@@ -109,7 +109,9 @@ header {
     color: white;
     text-decoration: none;
     border-radius: 4px;
-    margin: 0 3px 6px;
+    margin: 0 8px 8px 0; /* espacements entre les boutons */
+    display: inline-block;
+    white-space: nowrap;
 }
 
 .menu-btn:hover {

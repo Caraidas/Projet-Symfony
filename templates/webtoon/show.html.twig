@@ -2,86 +2,14 @@
 {% block title %}{{ webtoon.titre }}{% endblock %}
 
 {% block body %}
-    <style>
-    .btn-edit {
-        display: inline-block;
-        padding: 10px 15px;
-        background-color: #007bff;
-        color: white;
-        text-decoration: none;
-        border-radius: 6px;
-        margin-bottom: 15px;
-    }
-    .btn-edit:hover {
-        background-color: #0056b3;
-    }
-    .webtoon-container {
-        display: flex;
-        gap: 2rem;
-        align-items: flex-start;
-        margin: 2rem auto;
-        max-width: 1000px;
-    }
-
-    .webtoon-card-wrapper {
-        background: radial-gradient(ellipse at center,rgb(67, 75, 94) 0%,rgb(32, 40, 60) 100%);
-        padding: 1.5rem;
-        border-radius: 2rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-        max-width: 260px;
-        margin: auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .webtoon-card-wrapper img {
-        max-width: 100%;
-        border-radius: 1rem;
-        box-shadow: 0 8px 20px rgba(114, 112, 112, 0.3);
-        transition: transform 0.3s ease;
-    }
-
-    .webtoon-card-wrapper img:hover {
-        transform: scale(1.03);
-    }
-
-    .episode-list {
-        flex: 2;
-        background-color: #041629;
-        padding: 1rem;
-        border-radius: 8px;
-        max-width: 500px;
-        width: 100%;
-    }
-
-    .episode-entry {
-        padding: 0.75rem 0;
-        border-bottom: 1px solid #eee;
-    }
-
-    .episode-entry:last-child {
-        border-bottom: none;
-    }
-
-    .episode-entry a {
-        text-decoration: none;
-        color: #333;
-        font-size: 1rem;
-    }
-
-    .episode-entry a:hover {
-        text-decoration: underline;
-    }
-    </style>
     {% if app.user and webtoon.user == app.user and isAuthor %}
-        <a href="{{ path('episode_form', { slug: webtoon.slug }) }}" class="btn-edit"   >
+        <a href="{{ path('episode_form', { slug: webtoon.slug }) }}" class="menu-btn"   >
             ➕ Ajouter un épisode
         </a>
-        <a href="{{ path('episode_edit_form', { slug: webtoon.slug }) }}" class="btn-edit">
+        <a href="{{ path('episode_edit_form', { slug: webtoon.slug }) }}" class="menu-btn">
             ✏️ Modifier un épisode
         </a>
-        <a href="{{ path('webtoon_edit', { slug: webtoon.slug }) }}" class="btn-edit">
+        <a href="{{ path('webtoon_edit', { slug: webtoon.slug }) }}" class="menu-btn">
             ✏️ Modifier Webtoon
         </a>
     {% endif %}
@@ -94,12 +22,12 @@
         {% endfor %}
 
         <form method="post" action="{{ path('webtoon_like', {id: webtoon.id}) }}">
-            <button type="submit" class="btn-edit">
+            <button type="submit" class="menu-btn">
                 {{ liked ? 'Je n’aime plus ❤️' : 'J’aime ❤️' }}
             </button>
         </form>
         <form action="{{ path('toggle_favori', { id: webtoon.id }) }}" method="post">
-            <button type="submit"  class="btn-edit">
+            <button type="submit"  class="menu-btn">
                 {% if app.user.favoris.contains(webtoon) %}
                     Retirer des favoris
                 {% else %}
@@ -144,6 +72,32 @@
                 <p>Aucun épisode pour le moment.</p>
             {% endif %}
         </div>
+    </div>
+
+    <h2>Commentaires</h2>
+
+    {# Formulaire d'ajout de commentaire #}
+    {% if app.user %}
+        <div class="comment-box">
+            {{ form_start(form) }}
+                {{ form_row(form.message) }}
+                <button type="submit" class="send-btn">➤</button>
+            {{ form_end(form) }}
+        </div>
+    {% else %}
+        <p><a href="{{ path('app_login') }}">Connecte-toi</a> pour commenter ce webtoon.</p>
+    {% endif %}
+
+    {# Liste des commentaires #}
+    <div>
+        {% for commentaire in commentaires %}
+            <div style="margin-bottom: 1rem; padding: 0.5rem; border-bottom: 1px solid #ccc;">
+                <strong>{{ commentaire.user.pseudo }}</strong><br>
+                <p>{{ commentaire.message }}</p>
+            </div>
+        {% else %}
+            <p>Soyez le premier à commenter ce Webtoon !</p>
+        {% endfor %}
     </div>
 
 {% endblock %}

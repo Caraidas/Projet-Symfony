@@ -17,7 +17,7 @@
                     <ul class="space-y-1">
                         {% for episode in webtoon.episodes|slice(-2)|reverse %}
                             <li class="text-sm text-blue-600">
-                                <a href="{{ path('episode_detail', { slug: webtoon.slug , number: episode.number } ) }}">{{ episode.title }}</a>
+                                <a href="{{ path('episode_detail', { slug: webtoon.slug , number: episode.number } ) }}" class="menu-btn">{{ episode.title }}</a>
                             </li>
                         {% else %}
                             <li class="text-sm text-gray-400">Aucun épisode</li>

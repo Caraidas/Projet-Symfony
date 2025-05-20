@@ -27,8 +27,8 @@ class Commentaire
     #[ORM\JoinColumn(nullable: false)]
     private ?Webtoon $webtoon = null;
 
-    #[ORM\ManyToOne(inversedBy: 'Commentaire')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Episode::class, inversedBy: 'commentaires')]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Episode $episode = null;
 
     public function getId(): ?int
