@@ -55,10 +55,7 @@
                 </h1></a>
             </div>
             <div class="menu">
-                {% if not app.user %}
-                    <a href="{{ path('app_login') }}" class="menu-btn">Se connecter</a>
-                    <a href="{{ path('app_register') }}" class="menu-btn">S'inscrire</a>
-                {% endif %}
+                
             
             {% if is_granted('ROLE_AUTHOR') %}
                 <a href="{{ path('webtoon_form') }}" class="menu-btn">
@@ -73,10 +70,15 @@
             {% if is_granted('ROLE_ADMIN') %}
                 <a href="{{ path('admin_user_list') }}" class="menu-btn">Admin</a>
             {% endif %}
-
+            {% if not app.user %}
+                <a href="{{ path('app_login') }}" class="menu-btn">Se connecter</a>
+                <a href="{{ path('app_register') }}" class="menu-btn">S'inscrire</a>
+            {% else %}
+                <a href="{{ path('app_logout') }}" class="menu-btn">Déconnexion</a>
+            {% endif %}
+            
             </div>
-
-            <a href="{{ path('home') }}" class="menu-btn">Accueil</a>
+            
         </header>
 
         <main>

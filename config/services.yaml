@@ -20,7 +20,12 @@ services:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
-            - '../src/Entity/'
+            - '../src/Entity/Commentaire.php'
+            - '../src/Entity/Genre.php'
+            - '../src/Entity/Image.php'
+            - '../src/Entity/Like.php'
+            - '../src/Entity/User.php'
+            - '../src/Entity/Webtoon.php'
             - '../src/Kernel.php'
 
     # add more service definitions when explicit configuration is needed

@@ -5,17 +5,6 @@
 
 {% block body %}
 
-    <div class="user-status">
-    {% if user %}
-        <p>Bienvenue, {{ user.pseudo }} !</p>
-        <form method="post" action="{{ path('app_logout') }}">
-            <button type="submit">Se déconnecter</button>
-        </form>
-    {% else %}
-        <p>Vous n'êtes pas connecté. <a href="{{ path('app_login') }}">Se connecter</a></p>
-    {% endif %}
-    </div>
-
     <h1>Liste des Webtoons</h1>
 
     {% if webtoons is not empty %}

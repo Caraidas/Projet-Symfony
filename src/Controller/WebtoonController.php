@@ -31,43 +31,55 @@ class WebtoonController extends AbstractController
         ]);
     }
     
-    #[Route('/{slug}/{id}', name: 'episode_detail', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function showEpisode(string $slug, Episode $episode, EntityManagerInterface $em): Response
-    {
-        $webtoon = $episode->getWebtoon();
+    #[Route('/webtoon/{slug}/{number}', name: 'episode_detail', requirements: ['number' => '\d+'], methods: ['GET'])]
+public function showEpisode(string $slug, int $number, EntityManagerInterface $em): Response
+{
+    $webtoon = $em->getRepository(Webtoon::class)->findOneBy(['slug' => $slug]);
 
-        if (!$webtoon || $webtoon->getSlug() !== $slug) {
-            throw $this->createNotFoundException('Webtoon non trouvé pour cet épisode.');
-        }
-
-        $episodeRepo = $em->getRepository(Episode::class);
-        $previousEpisode = $episodeRepo->createQueryBuilder('e')
-            ->where('e.webtoon = :webtoon')
-            ->andWhere('e.number < :currentNumber')
-            ->setParameter('webtoon', $webtoon)
-            ->setParameter('currentNumber', $episode->getNumber())
-            ->orderBy('e.number', 'DESC')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
-
-        $nextEpisode = $episodeRepo->createQueryBuilder('e')
-            ->where('e.webtoon = :webtoon')
-            ->andWhere('e.number > :currentNumber')
-            ->setParameter('webtoon', $webtoon)
-            ->setParameter('currentNumber', $episode->getNumber())
-            ->orderBy('e.number', 'ASC')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
-
-        return $this->render('webtoon/episode/show.html.twig', [
-            'episode' => $episode,
-            'previousEpisode' => $previousEpisode,
-            'nextEpisode' => $nextEpisode,
-            'webtoon' => $webtoon,
-        ]);
+    if (!$webtoon) {
+        throw $this->createNotFoundException('Webtoon non trouvé.');
     }
+
+    $episode = $em->getRepository(Episode::class)->findOneBy([
+        'webtoon' => $webtoon,
+        'number' => $number,
+    ]);
+
+    if (!$episode) {
+        throw $this->createNotFoundException('Épisode non trouvé.');
+    }
+
+    // Requête pour épisode précédent
+    $episodeRepo = $em->getRepository(Episode::class);
+    $previousEpisode = $episodeRepo->createQueryBuilder('e')
+        ->where('e.webtoon = :webtoon')
+        ->andWhere('e.number < :currentNumber')
+        ->setParameter('webtoon', $webtoon)
+        ->setParameter('currentNumber', $episode->getNumber())
+        ->orderBy('e.number', 'DESC')
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getOneOrNullResult();
+
+    // Requête pour épisode suivant
+    $nextEpisode = $episodeRepo->createQueryBuilder('e')
+        ->where('e.webtoon = :webtoon')
+        ->andWhere('e.number > :currentNumber')
+        ->setParameter('webtoon', $webtoon)
+        ->setParameter('currentNumber', $episode->getNumber())
+        ->orderBy('e.number', 'ASC')
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getOneOrNullResult();
+
+    return $this->render('webtoon/episode/show.html.twig', [
+        'episode' => $episode,
+        'previousEpisode' => $previousEpisode,
+        'nextEpisode' => $nextEpisode,
+        'webtoon' => $webtoon,
+    ]);
+}
+
 
     #[Route('/webtoon/{slug}/edit', name: 'webtoon_edit')]
     public function edit(

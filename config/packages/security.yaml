@@ -64,13 +64,10 @@ security:
         # get favoris
 
         # Accès auteur authentifié
-        # post ajouter/modifier/supprimer un épisode
         - { path: ^/api/webtoon/create, roles: ROLE_AUTHOR, methods: [POST] }
-        # post ajouter/modifier/supprimer un webtoon
 
         # Accès admin
         - { path: ^/admin, roles: ROLE_ADMIN }
-        # post modifier/supprimer un utilisateur
 
 when@test:
     security:

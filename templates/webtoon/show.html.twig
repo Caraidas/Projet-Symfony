@@ -98,14 +98,8 @@
                 {{ liked ? 'Je n’aime plus ❤️' : 'J’aime ❤️' }}
             </button>
         </form>
-    {% else %}
-        <p><a href="{{ path('app_login') }}">Connecte-toi pour aimer ce webtoon</a></p>
-    {% endif %}
-    <p>{{ webtoon.likes|length }} j'aime</p>
-    
-    {% if is_granted('ROLE_USER') %}
         <form action="{{ path('toggle_favori', { id: webtoon.id }) }}" method="post">
-            <button type="submit">
+            <button type="submit"  class="btn-edit">
                 {% if app.user.favoris.contains(webtoon) %}
                     Retirer des favoris
                 {% else %}
@@ -113,7 +107,10 @@
                 {% endif %}
             </button>
         </form>
+    {% else %}
+        <p><a href="{{ path('app_login') }}">Connecte-toi pour aimer ce webtoon</a></p>
     {% endif %}
+    <p>{{ webtoon.likes|length }} ❤️</p>
 
     
 
@@ -136,9 +133,9 @@
                 <ul>
                     {% for episode in episodes %}
                         <li>
-                            <a href="{{ path('episode_detail', {slug: webtoon.slug, id: episode.number}) }}">
+                            <a href="{{ path('episode_detail', { slug: webtoon.slug, number: episode.number }) }}">
                                 Voir l’épisode {{ episode.number }} : {{ episode.title }}
-                            </a> 
+                            </a>
                             <p>{{ episode.createdAt|date('d/m/Y') }}</p> 
                         </li>
                     {% endfor %}

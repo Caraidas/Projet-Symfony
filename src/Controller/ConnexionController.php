@@ -36,7 +36,7 @@ class ConnexionController extends AbstractController
         return $this->json(['error' => 'Token manquant'], 400);
     }
 
-    #[Route(path:"/logout", name:"app_logout", methods: ["POST"])]
+    #[Route(path:"/logout", name:"app_logout", methods: ["POST","GET"])]
     public function logout(Security $security): Response | null
     {
         return $security->logout();
