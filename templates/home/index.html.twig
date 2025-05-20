@@ -18,6 +18,7 @@
                 <a href="webtoon/{{webtoon.slug}}">
                     <img src="{{ asset('images/' ~ (webtoon.image ? webtoon.image : 'Default.png')) }}" alt="{{ webtoon.titre }}" width="200">
                 </a>
+                <p>{{ webtoon.likes|length }} ❤️</p>
                 <p>{{ webtoon.description }}</p>
 
                 {% if webtoon.genre is not empty %}

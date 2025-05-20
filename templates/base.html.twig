@@ -103,7 +103,6 @@
                 </h1></a>
             </div>
             <div class="menu">
-                
             
             {% if is_granted('ROLE_AUTHOR') %}
                 <a href="{{ path('webtoon_form') }}" class="menu-btn">
@@ -126,6 +125,18 @@
             {% endif %}
             
             </div>
+            <form action="{{ path('webtoon_search') }}" method="get" style="display: flex; gap: 8px;">
+                <input
+                    type="text"
+                    name="q"
+                    placeholder="Rechercher un webtoon..."
+                    value="{{ app.request.get('q') }}"
+                    style="padding: 5px 10px; border-radius: 4px; border: 1px solid #ccc;"
+                >
+                <button type="submit" style="padding: 5px 10px; background-color: #36b3b3; color: white; border: none; border-radius: 4px;">
+                    🔍
+                </button>
+            </form>
             
         </header>
 

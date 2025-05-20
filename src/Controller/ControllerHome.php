@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\Webtoon;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -51,4 +52,23 @@ class ControllerHome extends AbstractController
             'webtoons' => $favoris,
         ]);
     }
+
+    #[Route('/recherche', name: 'webtoon_search')]
+    public function search(Request $request, EntityManagerInterface $em): Response
+    {
+        $query = $request->query->get('q');
+
+        $webtoonRepo = $em->getRepository(Webtoon::class);
+        $webtoons = $webtoonRepo->createQueryBuilder('w')
+            ->where('w.titre LIKE :query')
+            ->setParameter('query', '%' . $query . '%')
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('home/search_results.html.twig', [
+            'webtoons' => $webtoons,
+            'query' => $query,
+        ]);
+    }
+
 }

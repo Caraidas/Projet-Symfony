@@ -3,17 +3,83 @@
 {% block title %}Connexion{% endblock %}
 
 {% block body %}
-    <h1>Connexion</h1>
+    <style>
+        body {
+            background-color: #0d1b2a; /* fond sombre */
+            color: white;
+            font-family: Arial, sans-serif;
+        }
 
-    <form id="login-form">
-        <label for="email">Email :</label>
-        <input type="email" id="email" name="email" required>
+        .login-container {
+            max-width: 400px;
+            margin: 80px auto;
+            background-color: #0d1b2a;
+            padding: 30px;
+            border-radius: 8px;
+        }
 
-        <label for="password">Mot de passe :</label>
-        <input type="password" id="password" name="password" required>
+        .login-container h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
 
-        <button type="submit">Se connecter</button>
-    </form>
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .login-btn {
+            background-color: #36b3b3;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            font-size: 16px;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        .login-btn:hover {
+            background-color: #2ea3a3;
+        }
+    </style>
+
+    <div class="login-container">
+        <h1>Se connecter</h1>
+
+        <form id="login-form">
+            <label for="email">Email *</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Password *</label>
+            <input type="password" id="password" name="password" required>
+
+            <div class="form-actions">
+                <button type="submit" class="login-btn">Log In</button>
+            </div>
+        </form>
+    </div>
 
     <script>
         document.getElementById('login-form').addEventListener('submit', async function (e) {
@@ -40,7 +106,6 @@
                 const data = await response.json();
                 const token = data.token;
 
-                // Envoie du token à Symfony pour stockage en session
                 await fetch('/store-token', {
                     method: 'POST',
                     headers: {

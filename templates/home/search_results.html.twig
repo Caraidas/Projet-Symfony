@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>Résultats pour "{{ query }}"</h2>
+
+    {% if webtoons is empty %}
+        <p>Aucun résultat trouvé.</p>
+    {% else %}
+        <ul>
+            {% for webtoon in webtoons %}
+                <div class="webtoon">
+                    <div class="webtoon-card">
+                        <a href="webtoon/{{webtoon.slug}}">
+                        <h3>{{ webtoon.titre }}</h3>
+                        </a>
+                        <a href="webtoon/{{webtoon.slug}}">
+                            <img src="{{ asset('images/' ~ (webtoon.image ? webtoon.image : 'Default.png')) }}" alt="{{ webtoon.titre }}" width="200">
+                        </a>
+                        <p>{{ webtoon.likes|length }} ❤️</p>
+                        <p>{{ webtoon.description }}</p>
+
+                        {% if webtoon.genre is not empty %}
+                            <p><strong>Genres :</strong>
+                                {% for genre in webtoon.genre %}
+                                    {{ genre.nom }}{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </p>
+                        {% else %}
+                            <p><em>Aucun genre associé.</em></p>
+                        {% endif %}
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
