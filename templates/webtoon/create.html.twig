@@ -3,27 +3,33 @@
 {% block title %}Créer un Webtoon{% endblock %}
 
 {% block body %}
-    <h1>Créer un Webtoon</h1>
 
-    <form id="webtoon-form" enctype="multipart/form-data">
-        <label for="titre">Titre</label>
-        <input type="text" name="titre" id="titre" required>
+    <div class="form-container">
+        <h1>Créer un Webtoon</h1>
 
-        <label for="description">Description</label>
-        <textarea name="description" id="description" required></textarea>
+        <form id="webtoon-form" enctype="multipart/form-data">
+            <label for="titre">Titre</label>
+            <input type="text" name="titre" id="titre" required>
 
-        <label for="genres">Genres</label>
-        {% for genre in genres %}
-            <div>
-                <input type="checkbox" name="genres[]" value="{{ genre.id }}"> {{ genre.nom }}
+            <label for="description">Description</label>
+            <textarea name="description" id="description" required></textarea>
+
+            <label for="genres">Genres</label>
+            <div class="genre-checkboxes">
+                {% for genre in genres %}
+                    <label>
+                        <input type="checkbox" name="genres[]" value="{{ genre.id }}">
+                        {{ genre.nom }}
+                    </label>
+                {% endfor %}
             </div>
-        {% endfor %}
 
-        <label for="image">Image</label>
-        <input type="file" name="image" id="image" accept="image/*" required>
+            <label for="image">Image</label>
+            <input type="file" name="image" id="image" accept="image/*" required>
 
-        <button type="submit">Créer</button>
-    </form>
+            <button type="submit" class="submit-btn">Créer</button>
+        </form>
+    </div>
 
     <script>
         document.getElementById('webtoon-form').addEventListener('submit', async function (e) {

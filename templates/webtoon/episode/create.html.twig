@@ -1,14 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-    <h1>Créer un épisode pour {{ webtoon.titre }}</h1>
+{% block title %}Créer un épisode{% endblock %}
 
-    <form id="episodeForm" enctype="multipart/form-data">
-        <input type="text" name="title" placeholder="Titre" required><br>
-        <input type="number" name="number" placeholder="Numéro" required><br>
-        <input type="file" name="images[]" multiple required><br>
-        <button type="submit">Envoyer</button>
-    </form>
+{% block body %}
+    <div class="form-container">
+        <h1>Créer un épisode pour <em>{{ webtoon.titre }}</em></h1>
+
+        <form id="episodeForm" enctype="multipart/form-data">
+            <label for="title">Titre</label>
+            <input type="text" name="title" id="title" placeholder="Titre" required>
+
+            <label for="number">Numéro</label>
+            <input type="number" name="number" id="number" placeholder="Numéro de l'épisode" required>
+
+            <label for="images">Images</label>
+            <input type="file" name="images[]" id="images" multiple required>
+
+            <button type="submit" class="submit-btn">Envoyer</button>
+        </form>
+    </div>
 
     <script>
         const form = document.getElementById('episodeForm');

@@ -1,32 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <style>
-        .nav-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        .nav-button {
-            background-color: #36b3b3;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: background-color 0.2s ease-in-out;
-        }
-
-        .nav-button:hover {
-            background-color: #2ea3a3;
-        }
-    </style>
 
     <h1>{{ episode.title }}</h1>
     <p>Numéro : {{ episode.number }}</p>

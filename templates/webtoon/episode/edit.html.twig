@@ -1,25 +1,26 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-<h2>Modifier un épisode de {{ webtoon.titre }}</h2>
+<div class="form-container">
+    <h2>Modifier un épisode de {{ webtoon.titre }}</h2>
 
-<form id="editEpisodeForm" method="post" enctype="multipart/form-data">
-    <label for="episode_id">Épisode :</label>
-    <select name="episode_id" id="episode_id" required>
-        {% for episode in episodes %}
-            <option value="{{ episode.id }}">
-                Épisode {{ episode.number }} - {{ episode.title }}
-            </option>
-        {% endfor %}
-    </select>
+    <form id="editEpisodeForm" method="post" enctype="multipart/form-data">
+        <label for="episode_id">Épisode :</label>
+        <select name="episode_id" id="episode_id" required>
+            {% for episode in episodes %}
+                <option value="{{ episode.id }}">
+                    Épisode {{ episode.number }} - {{ episode.title }}
+                </option>
+            {% endfor %}
+        </select>
 
-    <br><br>
-    <label for="images">Nouvelles images :</label>
-    <input type="file" name="images[]" multiple required>
+        <br><br>
+        <label for="images">Nouvelles images :</label>
+        <input type="file" name="images[]" multiple required>
 
-    <br><br>
-    <button type="submit">Mettre à jour</button>
-</form>
-
+        <br><br>
+        <button type="submit" class="submit-btn">Mettre à jour</button>
+    </form>
+</div>
 <script>
 document.getElementById('editEpisodeForm').addEventListener('submit', async function(e) {
     e.preventDefault();

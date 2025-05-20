@@ -1,0 +1,375 @@
+body {
+    background-color: #020d18;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.form-container {
+    max-width: 600px;
+    margin: 50px auto;
+    background-color: #0d1b2a;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.form-container h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: bold;
+}
+
+label {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 8px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="file"],
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    background-color: #ffffff;
+    color: #000000;
+}
+
+input[type="file"] {
+    background-color: #f0f0f0;
+}
+
+textarea {
+    resize: vertical;
+    height: 100px;
+}
+
+.submit-btn {
+    margin-top: 25px;
+    background-color: #36b3b3;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 16px;
+    border-radius: 30px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.submit-btn:hover {
+    background-color: #2ea3a3;
+}
+
+.genre-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.genre-checkboxes label {
+    display: flex;
+    align-items: center;
+    background-color: #1b2b40;
+    border-radius: 20px;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.genre-checkboxes input[type="checkbox"] {
+    margin-right: 6px;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a:hover {
+    color: #02aab0;
+}
+
+a:visited,
+a:active {
+    color: inherit;
+}
+
+header {
+    background-color: #0f2133;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-btn {
+    padding: 8px 12px;
+    background-color: #02aab0;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    margin: 0 3px 6px;
+}
+
+.menu-btn:hover {
+    background-color: #041629;
+}
+
+.webtoon {
+    background-color: #041629;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.comment-box {
+    margin-top: 30px;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #041629;
+}
+
+.comment-box textarea {
+    width: 99%;
+    height: 100px;
+    border: none;
+    resize: none;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: white;
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.comment-box textarea:disabled {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}
+
+.comment-actions button {
+    background: none;
+    border: none;
+    margin-left: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.comment-actions button:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+.send-btn {
+    color: white;
+    background-color: #36b3b3;
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    font-size: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.nav-button {
+    background-color: #36b3b3;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.nav-button:hover {
+    background-color: #2ea3a3;
+}
+
+.btn-edit {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.btn-edit:hover {
+    background-color: #0056b3;
+}
+
+.webtoon-container {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    margin: 2rem auto;
+    max-width: 1000px;
+}
+
+.webtoon-card-wrapper {
+    background: radial-gradient(ellipse at center, rgb(67, 75, 94) 0%, rgb(32, 40, 60) 100%);
+    padding: 1.5rem;
+    border-radius: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    max-width: 260px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.webtoon-card-wrapper img {
+    max-width: 100%;
+    border-radius: 1rem;
+    box-shadow: 0 8px 20px rgba(114, 112, 112, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.webtoon-card-wrapper img:hover {
+    transform: scale(1.03);
+}
+
+.episode-list {
+    flex: 2;
+    background-color: #041629;
+    padding: 1rem;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.episode-entry {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.episode-entry:last-child {
+    border-bottom: none;
+}
+
+.episode-entry a {
+    text-decoration: none;
+    color: #333;
+    font-size: 1rem;
+}
+
+.episode-entry a:hover {
+    text-decoration: underline;
+}
+
+.form-container h2 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+select#episode_id {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    background-color: #ffffff;
+    color: #000000;
+    margin-top: 8px;
+}
+
+select#episode_id:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(2, 170, 176, 0.5);
+}
+
+input[type="file"][name="images[]"] {
+    margin-top: 10px;
+}
+
+form#editEpisodeForm label {
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+form#editEpisodeForm button.submit-btn {
+    margin-top: 30px;
+}
+
+form[name="webtoon"] {
+    max-width: 600px;
+    margin: 50px auto;
+    background-color: #0d1b2a;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+form[name="webtoon"] label {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+form[name="webtoon"] input[type="text"],
+form[name="webtoon"] textarea,
+form[name="webtoon"] input[type="file"] {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    background-color: #ffffff;
+    color: #000000;
+}
+
+form[name="webtoon"] textarea {
+    resize: vertical;
+    height: 100px;
+}
+
+form[name="webtoon"] .checkbox {
+    background-color: #1b2b40;
+    border-radius: 20px;
+    padding: 6px 12px;
+    margin: 4px 0;
+    display: flex;
+    align-items: center;
+}
+
+form[name="webtoon"] .checkbox input {
+    margin-right: 10px;
+}
+
+form[name="webtoon"] button[type="submit"] {
+    margin-top: 25px;
+    background-color: #36b3b3;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 16px;
+    border-radius: 30px;
+    cursor: pointer;
+    width: 100%;
+}
+
+form[name="webtoon"] button[type="submit"]:hover {
+    background-color: #2ea3a3;
+}
+
+h1 {
+    text-align: center;
+    font-size: 26px;
+    margin: 30px auto 20px;
+    font-weight: bold;
+}
