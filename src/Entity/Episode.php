@@ -35,8 +35,8 @@ class Episode
     /**
      * @var Collection<int, Commentaire>
      */
-    #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'episode', orphanRemoval: true)]
-    private Collection $Commentaire;
+    #[ORM\OneToMany(mappedBy: 'episode', targetEntity: Commentaire::class, orphanRemoval: true)]
+    private Collection $commentaire;
 
     public function __construct()
     {

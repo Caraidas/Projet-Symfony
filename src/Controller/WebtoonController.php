@@ -3,6 +3,9 @@
 
 namespace App\Controller;
 
+
+use App\Entity\Commentaire;
+use App\Form\CommentaireType;
 use App\Entity\Webtoon;
 use App\Entity\Episode;
 use App\Entity\User;
@@ -13,9 +16,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[Route('/webtoon')]
 class WebtoonController extends AbstractController
 {
-    #[Route('/webtoon/{slug}', name: 'webtoon_show')]
+    #[Route('/{slug}', name: 'webtoon_show')]
     public function show(string $slug, EntityManagerInterface $em): Response
     {
         $webtoon = $em->getRepository(Webtoon::class)->findOneBy(['slug' => $slug]);
@@ -31,9 +35,9 @@ class WebtoonController extends AbstractController
         ]);
     }
     
-    #[Route('/webtoon/{slug}/{number}', name: 'episode_detail', requirements: ['number' => '\d+'], methods: ['GET'])]
-public function showEpisode(string $slug, int $number, EntityManagerInterface $em): Response
-{
+    #[Route('/{slug}/{number}', name: 'episode_detail', requirements: ['number' => '\d+'], methods: ['GET','POST'])]
+    public function showEpisode(string $slug, int $number, EntityManagerInterface $em, Request $request): Response
+    {
     $webtoon = $em->getRepository(Webtoon::class)->findOneBy(['slug' => $slug]);
 
     if (!$webtoon) {
@@ -72,16 +76,49 @@ public function showEpisode(string $slug, int $number, EntityManagerInterface $e
         ->getQuery()
         ->getOneOrNullResult();
 
+    // Crée un nouveau commentaire
+    $commentaire = new Commentaire();
+    $form = $this->createForm(CommentaireType::class, $commentaire);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $user = $this->getUser();
+        if (!$user) {
+            throw $this->createAccessDeniedException("Vous devez être connecté pour commenter.");
+        }
+
+        $commentaire->setUser($user);
+        $commentaire->setEpisode($episode);
+        $commentaire->setWebtoon($webtoon);
+
+        $em->persist($commentaire);
+        $em->flush();
+
+        return $this->redirectToRoute('episode_detail', [
+            'slug' => $slug,
+            'number' => $episode->getNumber(),
+        ]);
+    }
+
+    // Récupère les commentaires pour cet épisode
+    $commentaires = $em->getRepository(Commentaire::class)
+        ->findBy(['episode' => $episode], ['id' => 'DESC']);
+
+
     return $this->render('webtoon/episode/show.html.twig', [
         'episode' => $episode,
         'previousEpisode' => $previousEpisode,
         'nextEpisode' => $nextEpisode,
         'webtoon' => $webtoon,
+        'form' => $form->createView(),
+        'commentaires' => $commentaires,
+        'user' => $this->getUser(),
     ]);
+
 }
 
 
-    #[Route('/webtoon/{slug}/edit', name: 'webtoon_edit')]
+    #[Route('/{slug}/edit', name: 'webtoon_edit')]
     public function edit(
         string $slug,
         Request $request,
@@ -117,7 +154,7 @@ public function showEpisode(string $slug, int $number, EntityManagerInterface $e
         ]);
     }
 
-    #[Route('/webtoon/{id}/favori/toggle', name: 'toggle_favori')]
+    #[Route('/{id}/favori/toggle', name: 'toggle_favori')]
     public function toggleFavori(Webtoon $webtoon, EntityManagerInterface $em): Response
     {
         $user = $this->getUser();

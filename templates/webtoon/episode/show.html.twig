@@ -76,4 +76,31 @@
             class="nav-button">Back to Webtoon</a>
         {% endif %}
     </div>
+    <h2>Commentaires</h2>
+
+    {# Formulaire d'ajout de commentaire #}
+    {% if app.user %}
+        <div class="comment-box">
+            {{ form_start(form) }}
+                {{ form_row(form.message) }}
+                <button type="submit" class="send-btn">➤</button>
+            {{ form_end(form) }}
+        </div>
+    {% else %}
+        <p><a href="{{ path('app_login') }}">Connecte-toi</a> pour commenter cet épisode.</p>
+    {% endif %}
+
+    {# Liste des commentaires #}
+    <div>
+        {% for commentaire in commentaires %}
+            <div style="margin-bottom: 1rem; padding: 0.5rem; border-bottom: 1px solid #ccc;">
+                <strong>{{ commentaire.user.pseudo }}</strong><br>
+                <p>{{ commentaire.message }}</p>
+            </div>
+        {% else %}
+            <p>Soyez le premier à commenter cet épisode !</p>
+        {% endfor %}
+    </div>
+
+    
 {% endblock %}

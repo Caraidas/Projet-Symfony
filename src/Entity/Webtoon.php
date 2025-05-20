@@ -43,8 +43,8 @@ class Webtoon
     /**
      * @var Collection<int, Commentaire>
      */
-    #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'webtoon', orphanRemoval: true)]
-    private Collection $Commentaire;
+    #[ORM\OneToMany(mappedBy: 'webtoon', targetEntity: Commentaire::class, orphanRemoval: true)]
+    private Collection $commentaire;
 
     /**
      * @var Collection<int, User>
