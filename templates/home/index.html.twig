@@ -5,6 +5,21 @@
 
 {% block body %}
 
+    <h1>Pour vous</h1>
+
+    {% if user and recommendedWebtoons is not empty %}
+        <h2>Pour vous 🧠</h2>
+        <div class="carousel">
+            {% for webtoon in recommendedWebtoons %}
+                <div class="carousel-item">
+                    <a href="{{ path('webtoon_show', { slug: webtoon.slug }) }}">
+                        <img src="{{ asset('images/' ~ webtoon.image) }}" alt="{{ webtoon.titre }}" class="carousel-image">
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <h1>Liste des Webtoons</h1>
 
     {% if webtoons is not empty %}

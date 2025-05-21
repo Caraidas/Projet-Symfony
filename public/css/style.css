@@ -375,3 +375,20 @@ h1 {
     margin: 30px auto 20px;
     font-weight: bold;
 }
+.carousel {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    padding: 1rem 0;
+}
+
+.carousel-item {
+    flex: 0 0 auto;
+    width: 200px;
+}
+
+.carousel-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}

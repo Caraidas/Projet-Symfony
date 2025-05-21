@@ -20,15 +20,48 @@ class ControllerHome extends AbstractController
     {
         $user = $this->getUser();
         $jwtToken = $session->get('jwt_token');
-        #dd($jwtToken);
-        // Récupérer tous les webtoons depuis la base
+        
         $webtoons = $entityManager->getRepository(Webtoon::class)->findAll();
+
+        $recommendedWebtoons = [];
+
+        if ($user) {
+            $favoris = $user->getFavoris();
+
+            // Compter la fréquence des genres
+            $genreCount = [];
+            foreach ($favoris as $fav) {
+                $genres = $fav->getGenre();
+                foreach ($genres as $genre) {
+                    $genreCount[$genre->getNom()] = ($genreCount[$genre->getNom()] ?? 0) + 1;
+                }
+            }
+
+            // Trouver le genre préféré
+            arsort($genreCount);
+            $favoriteGenre = key($genreCount);
+
+            if ($favoriteGenre) {
+                // Rechercher les webtoons du genre préféré que l'utilisateur n’a pas en favori
+                $qb = $entityManager->createQueryBuilder();
+                $qb->select('w')
+                    ->from(Webtoon::class, 'w')
+                    ->leftJoin('w.genre', 'g')
+                    ->where('g.nom = :genre')
+                    ->setParameter('genre', $favoriteGenre);
+
+                $recommendedWebtoons = $qb->getQuery()->getResult();
+            }
+        }
 
         return $this->render('home/index.html.twig', [
             'webtoons' => $webtoons,
             'user' => $user,
+            'recommendedWebtoons' => $recommendedWebtoons,
         ]);
     }
+
+
     #[Route('/mes-favoris', name: 'user_favoris')]
     public function favoris(): Response
     {

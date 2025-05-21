@@ -72,7 +72,18 @@
                 <p>Aucun épisode pour le moment.</p>
             {% endif %}
         </div>
+    
     </div>
+    {% if webtoon.genre is not empty %}
+        <p><strong>Genres :</strong>
+            {% for genre in webtoon.genre %}
+                {{ genre.nom }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+    {% else %}
+        <p><em>Aucun genre associé.</em></p>
+    {% endif %}
+    
 
     <h2>Commentaires</h2>
 
